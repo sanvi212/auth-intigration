@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router";
+import React, { use } from "react";
+import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../Contexts/AuthContexts";
 // import { AuthContext } from "../../Contexts/AuthContexts";
 
@@ -7,14 +7,30 @@ const Navbar = () => {
     // const userInfo = use(AuthContext);
     // console.log('nav', userInfo)
 
-    // const (user) = use(AuthContext);
-    // console.log(user);
+    const {user, singOutUser} = use(AuthContext);
+    console.log(user);
 
+    const handlesingout = () => {
+      singOutUser()
+      .than(() => {
+        console.log('signOut Succesfully')
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
 
     const links = <>
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/login'>Login</NavLink></li>
     <li><NavLink to='/register'>Register</NavLink></li>
+    {
+      user && <>
+      <li><NavLink to='/orders'>Orders</NavLink></li>
+      <li><NavLink to='/profile'>Profile</NavLink></li>
+      
+      </>
+    }
     
     </>
   return (
@@ -53,10 +69,15 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        {/* {
-          user ? <button className="btn">Singout</button> : <a className="btn"> <NavLink to='login'>Login</NavLink></a>
-        } */}
-        <a className="btn"> <NavLink to='login'>Login</NavLink></a>
+        {
+          user ? <>
+          <span className="mr-4">Your Email: {user.email}</span>
+
+          <button onClick={handlesingout} className="btn btn-primary">Singout</button>
+          
+          </> : <Link className="btn btn-primary" to='login'>Login</Link>
+        }
+        {/* <a className="btn"> <NavLink to='login'>Login</NavLink></a> */}
       
       </div>
     </div>

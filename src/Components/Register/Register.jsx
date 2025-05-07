@@ -1,9 +1,10 @@
 import {React, useContext } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../../Contexts/AuthContexts';
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
+  const navigte = useNavigate;
 
   const handleRegister = e => {
     e.preventDefault();
@@ -15,16 +16,22 @@ const Register = () => {
     createUser(email, password)
       .then(result => {
         console.log(result);
+        navigte('/login')
+        
       })
       .catch(error => {
         console.log(error);
       });
+     
   };
 
   return (
     <div className="bg-base-100 min-h-screen">
       <div className="card w-full max-w-lg shrink-0 shadow-2xl mx-auto border mt-20">
         <h1 className="text-2xl font-bold text-center mt-10 text-cyan-500">Register Now</h1>
+        {
+          createUser ?? <p className="text-green-500">Account Created Succesfully</p>
+        }
         <div className="card-body">
           <form onSubmit={handleRegister}>
             <label className="label">Name</label>
